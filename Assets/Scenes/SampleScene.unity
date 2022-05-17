@@ -449,10 +449,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f067d7ecbb570049b2a0d2250fb29f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swipeRange: 50
+  swipeRange: 200
   tapRange: 10
-  _forceMult: 30
+  _forceMult: 0.4
   _minTimeMult: 0.1
+  _groundedSlowDownPercent: 0.93
+  _distMult: 5
 --- !u!4 &1669172687
 Transform:
   m_ObjectHideFlags: 0
@@ -488,5 +490,5 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
