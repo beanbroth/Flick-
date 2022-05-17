@@ -8,7 +8,11 @@ using System;
 
 public class Player : MonoBehaviour
 {
-    private Rigidbody2D _rb;
+    [SerializeField] private Rigidbody2D _centerRb;
+
+    [SerializeField] SoftBodyContainerController _sb;
+
+    public static event Action<Vector2> OnFlick;
 
     private Vector2 startTouchPosition;
     private Vector2 currentPosition;
@@ -28,7 +32,6 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
         EnhancedTouchSupport.Enable();
         TouchSimulation.Enable();
     }
@@ -54,7 +57,7 @@ public class Player : MonoBehaviour
     {
         if (_isGrounded)
         {
-            _rb.velocity = new Vector2(_rb.velocity.x * _groundedSlowDownPercent, _rb.velocity.y); 
+            _centerRb.velocity = new Vector2(_centerRb.velocity.x * _groundedSlowDownPercent, _centerRb.velocity.y); 
         }
     }
 
@@ -90,7 +93,7 @@ public class Player : MonoBehaviour
             }
             else
             {
-                _rb.velocity = (distance / _distMult * _forceMult * (Mathf.Max(_minTimeMult, 1 - _swipeTimer)));
+                ApplyFlickForce(distance);
             }
         }
 
@@ -101,17 +104,22 @@ public class Player : MonoBehaviour
         if (distance.magnitude > swipeRange)
         {
             Debug.Log(distance);
-            _rb.velocity = (distance / _distMult * _forceMult * (Mathf.Max(_minTimeMult, 1 - _swipeTimer)));
+            ApplyFlickForce(distance);
 
             _isSwiping = false;
         }
     }
 
+    private void ApplyFlickForce(Vector2 distance)
+    {
+        Vector2 flickVec = distance / _distMult * _forceMult * (Mathf.Max(_minTimeMult, 1 - _swipeTimer));
+        _centerRb.velocity = flickVec;
+        OnFlick?.Invoke(flickVec);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         _isGrounded = true;
-
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
