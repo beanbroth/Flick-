@@ -10,7 +10,6 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D _centerRb;
 
-    [SerializeField] SoftBodyContainerController _sb;
 
     public static event Action<Vector2> OnFlick;
 
@@ -18,10 +17,12 @@ public class Player : MonoBehaviour
     private Vector2 currentPosition;
     private Vector2 endTouchPosition;
     private bool _isSwiping = false;
-
+    [Header("Edit Flick Force")]
+    [SerializeField] private float _forceMult;
+    [Header("Tweak Deatails of Flick Detection (No reason to)")]
     [SerializeField] private float swipeRange;
     [SerializeField] private float tapRange;
-    [SerializeField] private float _forceMult;
+
     [SerializeField] private float _minTimeMult;
     private float _swipeTimer;
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public class SoftBodyContainerController : MonoBehaviour
 {
+    [Header("Softbody Generator Settings")]
+    [Tooltip("Radius of squishy ball")]
     [SerializeField] private float _radius;
     [SerializeField] private int _amountToSpawn;
     [SerializeField] private GameObject _nodePrefab;
@@ -10,6 +12,7 @@ public class SoftBodyContainerController : MonoBehaviour
     [SerializeField] private float _nodeScale;
 
     [SerializeField] private float _springStiffness;
+
     [SerializeField] private float _springDampening;
 
     [SerializeField] List<GameObject> _nodes = new List<GameObject>();
