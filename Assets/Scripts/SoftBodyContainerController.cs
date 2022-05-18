@@ -52,11 +52,10 @@ public class SoftBodyContainerController : MonoBehaviour
             ob.transform.localPosition = new Vector3(x, y, 0);
         }
 
-        _center.transform.localScale = Vector3.one * _nodeScale;
+        _center.GetComponent<CircleCollider2D>().radius = .5f * _nodeScale;
 
         for (int i = 0; i < _amountToSpawn; i++)
         {
-
             //connect right
             SpringJoint2D tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
             if (i == _amountToSpawn - 1)
