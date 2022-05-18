@@ -17,6 +17,10 @@ public class SoftBodyContainerController : MonoBehaviour
 
     [SerializeField] List<GameObject> _nodes = new List<GameObject>();
 
+    public GameObject CenterNode { get => _center; }
+    public int NodeCount { get => _amountToSpawn; }
+    public GameObject[] Nodes { get => _nodes.ToArray(); }
+
     void Start()
     {
 
@@ -43,7 +47,7 @@ public class SoftBodyContainerController : MonoBehaviour
             _nodes.Add(ob);
             ob.transform.parent = transform;
             ob.transform.localScale = Vector3.one * _nodeScale;
-            ob.transform.position = new Vector3(x, y, 0);
+            ob.transform.localPosition = new Vector3(x, y, 0);
         }
 
         _center.transform.localScale = Vector3.one * _nodeScale;
