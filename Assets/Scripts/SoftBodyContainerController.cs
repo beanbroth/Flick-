@@ -19,6 +19,8 @@ public class SoftBodyContainerController : MonoBehaviour
 
     public GameObject CenterNode { get => _center; }
     public int NodeCount { get => _amountToSpawn; }
+
+    public float NodeRadius { get => _nodeScale; }
     public GameObject[] Nodes { get => _nodes.ToArray(); }
 
     void Start()
