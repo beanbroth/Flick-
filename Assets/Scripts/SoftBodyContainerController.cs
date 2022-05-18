@@ -22,6 +22,7 @@ public class SoftBodyContainerController : MonoBehaviour
     void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
     private void _OnValidate()
     {
+        if (this == null) return;
         foreach (GameObject node in _nodes)
         {
             StartCoroutine(Destroy(node));
@@ -79,9 +80,6 @@ public class SoftBodyContainerController : MonoBehaviour
             tempJoint.connectedBody = _center.GetComponent<Rigidbody2D>();
             tempJoint.frequency = _springStiffness;
             tempJoint.dampingRatio = _springDampening;
-
-
-
         }
     }
     IEnumerator Destroy(GameObject go)
