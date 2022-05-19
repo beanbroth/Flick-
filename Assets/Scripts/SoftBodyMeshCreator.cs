@@ -14,14 +14,14 @@ public class SoftBodyMeshCreator : MonoBehaviour
 
 
 
-    void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
+    //void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
     private void _OnValidate()
     {
         if (this == null) return;
         GenerateInitalMesh();
     }
 
-    private void Start()
+    private void Awake()
     {
         GenerateInitalMesh();
     }
@@ -44,7 +44,7 @@ public class SoftBodyMeshCreator : MonoBehaviour
 
     private void GenerateInitalMesh()
     {
-        _meshRen.sharedMaterial = _mat;
+        //_meshRen.sharedMaterial = _mat;
         _mesh = new Mesh();
 
         List<Vector3> vertices = new List<Vector3>();

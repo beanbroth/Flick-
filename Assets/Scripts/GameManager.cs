@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _playerRef;
 
     [SerializeField] bool _startLevelOverride;
-    [SerializeField] int overRideLevel;
 
     [SerializeField] private String[] scenes;
     [SerializeField] int nextLevel;
@@ -41,14 +40,15 @@ public class GameManager : MonoBehaviour
     {
         nextLevel = 0;
         MakeSingleton();
-        LoadNextScene();
+        
         SetNextGameState(GameState.PlayingLevel);
 
-        if (_startLevelOverride)
+        if (!_startLevelOverride)
         {
-            nextLevel = overRideLevel;
+            LoadNextScene();
         }
     }
+
 
     private void Update()
     {
