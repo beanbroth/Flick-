@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class SoftBodyMeshCreator : MonoBehaviour
 {
+    [SerializeField] private SoftBodyGenerator _softBody;
+
     [SerializeField] private float width = 1;
     [SerializeField] private float height = 1;
     [SerializeField] private Material _mat;
@@ -10,7 +12,7 @@ public class SoftBodyMeshCreator : MonoBehaviour
     [SerializeField] private MeshFilter _meshFilt;
     private Mesh _mesh;
 
-    [SerializeField] private SoftBodyGenerator _softBody;
+
 
     void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
     private void _OnValidate()
@@ -48,10 +50,10 @@ public class SoftBodyMeshCreator : MonoBehaviour
         List<Vector3> vertices = new List<Vector3>();
         for (int i = 0; i < _softBody.NodeCount; i++)
         {
-            vertices.Add(_softBody.Nodes[i].transform.localPosition + (_softBody.Nodes[i].transform.localPosition).normalized * _softBody.NodeRadius/1.8f);
+            vertices.Add(_softBody.Nodes[i].transform.localPosition + (_softBody.Nodes[i].transform.localPosition).normalized * _softBody.NodeRadius / 1.8f);
 
         }
-        vertices.Add(new Vector3(0,0,0));
+        vertices.Add(new Vector3(0, 0, 0));
 
         //swuare shit
         //vertices.Add(new Vector3(0, 0, 0));

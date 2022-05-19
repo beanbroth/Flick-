@@ -8,6 +8,7 @@ using System;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private SoftBodyGenerator _softBody;
     [SerializeField] private Rigidbody2D _centerRb;
 
 
@@ -48,6 +49,16 @@ public class Player : MonoBehaviour
         SwipeCheck();
     }
 
+    public void SetVelToZero()
+    {
+        _centerRb.velocity = Vector3.zero;
+        for (int i = 0; i < _softBody.Nodes.Length; i++)
+        {
+            _softBody.Nodes[i].GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        }
+        
+    }
+
     private void FixedUpdate()
     {
         HorizontalFrictionWhenGrounded();
@@ -58,7 +69,7 @@ public class Player : MonoBehaviour
     {
         if (_isGrounded)
         {
-            _centerRb.velocity = new Vector2(_centerRb.velocity.x * _groundedSlowDownPercent, _centerRb.velocity.y); 
+            _centerRb.velocity = new Vector2(_centerRb.velocity.x * _groundedSlowDownPercent, _centerRb.velocity.y);
         }
     }
 
@@ -78,7 +89,7 @@ public class Player : MonoBehaviour
 
         if (!_isSwiping)
             return;
-      
+
         _swipeTimer += Time.deltaTime;
 
         //check if swipe ended early from finger being lifted
@@ -104,13 +115,12 @@ public class Player : MonoBehaviour
 
         if (distance.magnitude > swipeRange)
         {
-            Debug.Log(distance);
+            //Debug.Log(distance);
             ApplyFlickForce(distance);
 
             _isSwiping = false;
         }
     }
-
     private void ApplyFlickForce(Vector2 distance)
     {
         Vector2 flickVec = distance / _distMult * _forceMult * (Mathf.Max(_minTimeMult, 1 - _swipeTimer));

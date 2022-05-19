@@ -28,7 +28,7 @@ public class SoftBodyGenerator : MonoBehaviour
 
     void Start()
     {
-
+       // DontDestroyOnLoad(gameObject);
     }
 
     void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }

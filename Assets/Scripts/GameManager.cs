@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
 
     private GameState _nextSate;
 
+
+    [SerializeField] private GameObject _playerRef;
+
     [SerializeField] bool _startLevelOverride;
     [SerializeField] int overRideLevel;
 
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
 
     public GameState CurrentState { get => _state; }
+    public GameObject PlayerRef { get => _playerRef; }
 
     public enum GameState
     {
@@ -37,7 +41,8 @@ public class GameManager : MonoBehaviour
     {
         nextLevel = 0;
         MakeSingleton();
-        _shouldUpdateState = true;
+        LoadNextScene();
+        SetNextGameState(GameState.PlayingLevel);
 
         if (_startLevelOverride)
         {
@@ -84,8 +89,24 @@ public class GameManager : MonoBehaviour
 
     public void LoadNextScene()
     {
-        SceneManager.LoadScene(scenes[nextLevel]);
+        UnloadAllScenesExcept("BaseScene");
+        SceneManager.LoadScene(scenes[nextLevel], LoadSceneMode.Additive);
         nextLevel++;
+    }
+
+    //credit: https://answers.unity.com/questions/1305859/unload-all-scenes-except-one.html
+    void UnloadAllScenesExcept(string sceneName)
+    {
+        int c = SceneManager.sceneCount;
+        for (int i = 0; i < c; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            print(scene.name);
+            if (scene.name != sceneName)
+            {
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
     }
 
     private void MakeSingleton()
