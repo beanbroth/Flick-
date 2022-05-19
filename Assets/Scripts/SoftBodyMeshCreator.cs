@@ -10,7 +10,7 @@ public class SoftBodyMeshCreator : MonoBehaviour
     [SerializeField] private MeshFilter _meshFilt;
     private Mesh _mesh;
 
-    [SerializeField] private SoftBodyContainerController _softBody;
+    [SerializeField] private SoftBodyGenerator _softBody;
 
     void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
     private void _OnValidate()
