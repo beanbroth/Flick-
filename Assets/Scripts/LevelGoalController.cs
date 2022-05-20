@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LevelGoalController : MonoBehaviour
 {
-
     bool _wasActivated;
 
     private void Start()
@@ -18,9 +17,9 @@ public class LevelGoalController : MonoBehaviour
             Debug.Log("reached goal");
             _wasActivated = true;
 
-            GameManager.Instance.LoadNextScene();
+            GameManager.Instance.SetNextGameState(GameManager.GameState.LoadingLevel);
         }
-        
+
     }
 
 

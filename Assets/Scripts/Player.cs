@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        GameManager.OnGameStateChanged += GameStateChanged;
         EnhancedTouchSupport.Enable();
         TouchSimulation.Enable();
     }
@@ -59,17 +60,11 @@ public class Player : MonoBehaviour
         
     }
 
-    private void FixedUpdate()
+    void GameStateChanged(GameManager.GameState newState)
     {
-        HorizontalFrictionWhenGrounded();
-
-    }
-
-    private void HorizontalFrictionWhenGrounded()
-    {
-        if (_isGrounded)
+        if(newState == GameManager.GameState.LoadingLevel)
         {
-            _centerRb.velocity = new Vector2(_centerRb.velocity.x * _groundedSlowDownPercent, _centerRb.velocity.y);
+            SetVelToZero();
         }
     }
 
@@ -126,16 +121,5 @@ public class Player : MonoBehaviour
         Vector2 flickVec = distance / _distMult * _forceMult * (Mathf.Max(_minTimeMult, 1 - _swipeTimer));
         _centerRb.velocity = flickVec;
         OnFlick?.Invoke(flickVec);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        _isGrounded = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        _isGrounded = false;
-
     }
 }

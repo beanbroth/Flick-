@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] bool _startLevelOverride;
 
     [SerializeField] private String[] scenes;
-    [SerializeField] int nextLevel;
+    private int nextLevel;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public enum GameState
     {
         StartScreen,
+        LoadingLevel,
         PlayingLevel,
         PauseMenu,
         LossScreen
@@ -38,17 +39,31 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        nextLevel = 0;
-        MakeSingleton();
-        
-        SetNextGameState(GameState.PlayingLevel);
 
-        if (!_startLevelOverride)
+        MakeSingleton();
+
+        if (_startLevelOverride)
         {
-            LoadNextScene();
+            for (int i = 0; i < scenes.Length; i++)
+            {
+                if (scenes[i] == SceneManager.GetSceneAt(1).name)
+                {
+                    nextLevel = i + 1;
+                }
+            }
+        }
+        else
+        {
+            LoadSpecificLevel(0);
         }
     }
 
+    public void LoadSpecificLevel(int levelIndex)
+    {
+        UnloadAllScenesExcept("BaseScene");
+        SceneManager.LoadScene(scenes[levelIndex], LoadSceneMode.Additive);
+        SetNextGameState(GameState.LoadingLevel);
+    }
 
     private void Update()
     {
@@ -73,6 +88,9 @@ public class GameManager : MonoBehaviour
         switch (_state)
         {
             case GameState.StartScreen:
+                break;
+            case GameState.LoadingLevel:
+                LoadNextScene();
                 break;
             case GameState.PlayingLevel:
                 break;

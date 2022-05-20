@@ -28,13 +28,27 @@ public class SoftBodyGenerator : MonoBehaviour
 
     void Start()
     {
-       // DontDestroyOnLoad(gameObject);
+        GameManager.OnGameStateChanged += GameStateChanged;
+        // DontDestroyOnLoad(gameObject);
+    }
+
+    void GameStateChanged(GameManager.GameState newState)
+    {
+        if (newState == GameManager.GameState.LoadingLevel)
+        {
+            RebuildSoftbody();
+        }
     }
 
     void OnValidate() { UnityEditor.EditorApplication.delayCall += _OnValidate; }
     private void _OnValidate()
     {
         if (this == null) return;
+        RebuildSoftbody();
+    }
+
+    private void RebuildSoftbody()
+    {
         foreach (GameObject node in _nodes)
         {
             StartCoroutine(Destroy(node));
