@@ -155,7 +155,7 @@ public class SoftBodyMeshCreator : MonoBehaviour
         _mesh.Clear();
         _mesh.vertices = vertices.ToArray();
         _mesh.triangles = tris.ToArray();
-        _mesh.normals = normals.ToArray();
+        //_mesh.normals = normals.ToArray();
         _mesh.uv = uv.ToArray();
 
         _meshFilt.mesh = _mesh;

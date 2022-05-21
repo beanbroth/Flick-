@@ -54,14 +54,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            LoadSpecificLevel(0);
+            LoadSpecificLevel(1);
         }
     }
 
     public void LoadSpecificLevel(int levelIndex)
     {
-        UnloadAllScenesExcept("BaseScene");
-        SceneManager.LoadScene(scenes[levelIndex], LoadSceneMode.Additive);
+        nextLevel = levelIndex;
         SetNextGameState(GameState.LoadingLevel);
     }
 
