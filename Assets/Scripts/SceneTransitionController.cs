@@ -29,7 +29,7 @@ public class SceneTransitionController : MonoBehaviour
         {
             transform.localPosition = new Vector3(transform.localPosition.x, -54, transform.localPosition.z);
 
-            transform.DOLocalMove(new Vector3(transform.localPosition.x, -80, transform.localPosition.z), 0.5f).SetUpdate(true);
+            transform.DOLocalMove(new Vector3(transform.localPosition.x, -80, transform.localPosition.z), 1f).SetUpdate(true);
         }
     }
 }
