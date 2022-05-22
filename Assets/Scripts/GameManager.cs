@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            LoadSpecificLevel(1);
+            LoadSpecificLevel(0);
         }
     }
 
@@ -89,9 +89,11 @@ public class GameManager : MonoBehaviour
             case GameState.StartScreen:
                 break;
             case GameState.LoadingLevel:
-                LoadNextScene();
+                HandleLoadingLevel();
+
                 break;
             case GameState.PlayingLevel:
+
                 break;
             case GameState.PauseMenu:
                 break;
@@ -102,6 +104,22 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log(_state);
         OnGameStateChanged?.Invoke(_state);
+    }
+
+    private void HandleLoadingLevel()
+    {
+        Time.timeScale = 0f;
+        StartCoroutine(DelayedStartPlayingLevel());
+    }
+
+    private IEnumerator DelayedStartPlayingLevel()
+    {
+
+        yield return new WaitForSecondsRealtime(1f);
+        LoadNextScene();
+        Time.timeScale = 1;
+        UpdateGameState(GameState.PlayingLevel);
+
     }
 
     public void LoadNextScene()

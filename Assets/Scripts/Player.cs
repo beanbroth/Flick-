@@ -50,6 +50,51 @@ public class Player : MonoBehaviour
         SwipeCheck();
     }
 
+    private void FixedUpdate()
+    {
+        ConstrainPos();
+    }
+
+    void ConstrainPos()
+    {
+        float minX = _softBody.CenterNode.transform.position.x;
+        float minY = _softBody.CenterNode.transform.position.y;
+
+        float maxX = _softBody.CenterNode.transform.position.x;
+        float maxY = _softBody.CenterNode.transform.position.y;
+
+        for (int i = 0; i < _softBody.NodeCount; i++)
+        {
+            if (_softBody.Nodes[i].transform.position.y > maxY)
+            {
+                maxY = _softBody.Nodes[i].transform.position.y;
+            }
+
+            if (_softBody.Nodes[i].transform.position.y < minY)
+            {
+                minY = _softBody.Nodes[i].transform.position.y;
+            }
+
+            if (_softBody.Nodes[i].transform.position.x > maxX)
+            {
+                maxX = _softBody.Nodes[i].transform.position.x;
+            }
+
+            if (_softBody.Nodes[i].transform.position.x < minX)
+            {
+                minX = _softBody.Nodes[i].transform.position.x;
+            }
+        }
+
+        minX += _softBody.NodeRadius / 2;
+        minY += _softBody.NodeRadius / 2;
+
+        maxX -= _softBody.NodeRadius / 2;
+        maxY -= _softBody.NodeRadius / 2;
+
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, minX, maxX), Mathf.Clamp(transform.position.y, minY, maxY), transform.position.z);
+    }
+
     public void SetVelToZero()
     {
         _centerRb.velocity = Vector3.zero;
@@ -57,12 +102,12 @@ public class Player : MonoBehaviour
         {
             _softBody.Nodes[i].GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         }
-        
+
     }
 
     void GameStateChanged(GameManager.GameState newState)
     {
-        if(newState == GameManager.GameState.LoadingLevel)
+        if (newState == GameManager.GameState.LoadingLevel)
         {
             SetVelToZero();
         }

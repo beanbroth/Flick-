@@ -38,7 +38,7 @@ public class SoftBodyMeshCreator : MonoBehaviour
         {
             vertices.Add(_softBody.Nodes[i].transform.localPosition + (_softBody.Nodes[i].transform.localPosition).normalized * _softBody.NodeRadius / 1.8f);
         }
-        vertices.Add(new Vector3(0, 0, 0));
+        vertices.Add(new Vector3(0,0,0));
         _mesh.vertices = vertices.ToArray();
     }
 
@@ -53,7 +53,7 @@ public class SoftBodyMeshCreator : MonoBehaviour
             vertices.Add(_softBody.Nodes[i].transform.localPosition + (_softBody.Nodes[i].transform.localPosition).normalized * _softBody.NodeRadius / 1.8f);
 
         }
-        vertices.Add(new Vector3(0, 0, 0));
+        vertices.Add(transform.position);
 
         //swuare shit
         //vertices.Add(new Vector3(0, 0, 0));

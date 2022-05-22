@@ -18,6 +18,7 @@ public class SoftBodyGenerator : MonoBehaviour
     [SerializeField] List<GameObject> _nodes = new List<GameObject>();
     [SerializeField] private float _edgeAngleMin;
     [SerializeField] private float _edgeAngleMax;
+    [SerializeField] private float _minThickness;
 
     public float Radius { get => _radius; }
     public GameObject CenterNode { get => _center; }
@@ -29,12 +30,13 @@ public class SoftBodyGenerator : MonoBehaviour
     void Start()
     {
         GameManager.OnGameStateChanged += GameStateChanged;
+        RebuildSoftbody();
         // DontDestroyOnLoad(gameObject);
     }
 
     void GameStateChanged(GameManager.GameState newState)
     {
-        if (newState == GameManager.GameState.LoadingLevel)
+        if (newState == GameManager.GameState.PlayingLevel)
         {
             RebuildSoftbody();
         }
@@ -45,6 +47,30 @@ public class SoftBodyGenerator : MonoBehaviour
     {
         if (this == null) return;
         RebuildSoftbody();
+    }
+
+    private void FixedUpdate()
+    {
+        MaintainMinThickness();
+    }
+    private void MaintainMinThickness()
+    {
+        for (int i = 0; i < _amountToSpawn; i++)
+        {
+            float tempDist = Vector2.Distance(_nodes[i].transform.position, _nodes[(i + _amountToSpawn / 2) % _amountToSpawn].transform.position);
+            SpringJoint2D[] tempJoints = _nodes[i].GetComponents<SpringJoint2D>();
+            if (tempDist < _minThickness)
+            {
+                Debug.Log("rigid");
+                tempJoints = _nodes[i].GetComponents<SpringJoint2D>();
+                tempJoints[1].frequency = 15;
+                //tempJoints.di
+            }
+            else
+            {
+                tempJoints[1].frequency = 0.0001f;
+            }
+        }
     }
 
     private void RebuildSoftbody()
@@ -86,7 +112,7 @@ public class SoftBodyGenerator : MonoBehaviour
             //tempJoint.frequency = _springStiffness;
             //tempJoint.dampingRatio = _springDampening;
 
-            ////connect left
+            //connect left
             //tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
             //if (i == 0)
             //{
@@ -99,22 +125,27 @@ public class SoftBodyGenerator : MonoBehaviour
             //tempJoint.frequency = _springStiffness;
             //tempJoint.dampingRatio = _springDampening;
 
+
+
             //connect center
             SpringJoint2D tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
             tempJoint.connectedBody = _center.GetComponent<Rigidbody2D>();
             tempJoint.frequency = _springStiffness;
             tempJoint.dampingRatio = _springDampening;
+            tempJoint.autoConfigureDistance = false;
+            tempJoint.distance = Vector2.Distance(_nodes[i].transform.position, _center.transform.position);
 
+            //connect opposite
+            tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
+            tempJoint.connectedBody = _nodes[(i + _amountToSpawn / 2) % _amountToSpawn].GetComponent<Rigidbody2D>();
+            //tempJoint.frequency = _springStiffness / 2;
+            tempJoint.frequency = 0;
+            //tempJoint.dampingRatio = _springDampening;
+            tempJoint.dampingRatio = 0;
+            tempJoint.autoConfigureDistance = false;
+            tempJoint.distance = Vector2.Distance(_nodes[i].transform.position, _nodes[(i + _amountToSpawn / 2) % _amountToSpawn].transform.position);
 
-
-            // DO HTIS 
-            //DistanceJoint2D distJoint = _nodes[i].AddComponent(typeof(DistanceJoint2D)) as DistanceJoint2D;
-            //distJoint.connectedBody = _center.GetComponent<Rigidbody2D>();
-
-
-
-
-            //connect hinges
+            //connect adjcent hinges
             HingeJoint2D tempHinge = _nodes[i].AddComponent(typeof(HingeJoint2D)) as HingeJoint2D;
 
             if (i == _amountToSpawn - 1)
@@ -125,15 +156,20 @@ public class SoftBodyGenerator : MonoBehaviour
             {
                 tempHinge.connectedBody = _nodes[i + 1].GetComponent<Rigidbody2D>();
             }
-
-            //tempHinge.connectedBody = _center.GetComponent<Rigidbody2D>();
-
             JointAngleLimits2D limits = tempHinge.limits;
             limits.min = _edgeAngleMin;
             limits.max = _edgeAngleMax;
             tempHinge.limits = limits;
             tempHinge.useLimits = true;
 
+            ////connect center hinges (doesnt work becuase hinge does distance)
+            //tempHinge = _nodes[i].AddComponent(typeof(HingeJoint2D)) as HingeJoint2D;
+            //tempHinge.connectedBody = _center.GetComponent<Rigidbody2D>();
+            //limits = tempHinge.limits;
+            //limits.min = _edgeAngleMin;
+            //limits.max = _edgeAngleMax;
+            //tempHinge.limits = limits;
+            //tempHinge.useLimits = true;
         }
     }
     IEnumerator Destroy(GameObject go)

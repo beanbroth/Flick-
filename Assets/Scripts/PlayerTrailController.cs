@@ -8,12 +8,20 @@ public class PlayerTrailController : MonoBehaviour
     [SerializeField] private SoftBodyGenerator _softBody;
     void Start()
     {
+        GameManager.OnGameStateChanged += GameStateChanged;
         _tr.startWidth = _softBody.Radius + _softBody.NodeRadius * 2;
     }
 
-    // Update is called once per frame
+    void GameStateChanged(GameManager.GameState newState)
+    {
+        if (newState == GameManager.GameState.PlayingLevel)
+        {
+            _tr.Clear();
+        }
+    }
+
     void Update()
     {
-        
+
     }
 }
