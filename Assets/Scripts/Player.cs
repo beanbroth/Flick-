@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ConstrainPos();
+        //ConstrainPos();
     }
 
     void ConstrainPos()
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
 
     void GameStateChanged(GameManager.GameState newState)
     {
-        if (newState == GameManager.GameState.LoadingLevel)
+        if (newState == GameManager.GameState.PlayingLevel)
         {
             SetVelToZero();
         }

@@ -9,6 +9,7 @@ public class SceneTransitionController : MonoBehaviour
     void Start()
     {
         GameManager.OnGameStateChanged += GameStateChanged;
+        //transform.DOLocalMove(new Vector3(transform.localPosition.x, transform.localPosition.y, transform.localPosition.z), 0.001f).SetUpdate(true);
     }
 
     // Update is called once per frame
@@ -19,17 +20,23 @@ public class SceneTransitionController : MonoBehaviour
 
     void GameStateChanged(GameManager.GameState newState)
     {
-        if (newState == GameManager.GameState.LoadingLevel)
+        if (newState == GameManager.GameState.PreLoadingLevel)
         {
-            transform.localPosition = new Vector3(transform.localPosition.x, 13, transform.localPosition.z);
-            transform.DOLocalMove(new Vector3(transform.localPosition.x, -13, transform.localPosition.z), 1f).SetUpdate(true);
+            StartCoroutine(DelayedSceneTransition());
         }
 
-        if(newState == GameManager.GameState.PlayingLevel)
+        if (newState == GameManager.GameState.PlayingLevel)
         {
-            transform.localPosition = new Vector3(transform.localPosition.x, -54, transform.localPosition.z);
+            transform.localPosition = new Vector3(transform.localPosition.x, -46, transform.localPosition.z);
 
             transform.DOLocalMove(new Vector3(transform.localPosition.x, -80, transform.localPosition.z), 1f).SetUpdate(true);
         }
+    }
+
+    private IEnumerator DelayedSceneTransition()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        transform.localPosition = new Vector3(transform.localPosition.x, 13, transform.localPosition.z);
+        transform.DOLocalMove(new Vector3(transform.localPosition.x, -13, transform.localPosition.z), 1f).SetUpdate(true);
     }
 }

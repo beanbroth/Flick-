@@ -31,8 +31,10 @@ public class GameManager : MonoBehaviour
     public enum GameState
     {
         StartScreen,
+        PreLoadingLevel,
         LoadingLevel,
         PlayingLevel,
+        Dead,
         PauseMenu,
         LossScreen
     }
@@ -61,10 +63,10 @@ public class GameManager : MonoBehaviour
     public void LoadSpecificLevel(int levelIndex)
     {
         nextLevel = levelIndex;
-        SetNextGameState(GameState.LoadingLevel);
+        SetNextGameState(GameState.PreLoadingLevel);
     }
-
-    private void Update()
+   
+    private void FixedUpdate()
     {
         if (!_shouldUpdateState)
             return;
@@ -88,12 +90,16 @@ public class GameManager : MonoBehaviour
         {
             case GameState.StartScreen:
                 break;
+            case GameState.PreLoadingLevel:
+                HandlePreLoadingLevel();
+                break;
             case GameState.LoadingLevel:
                 HandleLoadingLevel();
-
                 break;
             case GameState.PlayingLevel:
-
+                break;
+            case GameState.Dead:
+                HandleDead();
                 break;
             case GameState.PauseMenu:
                 break;
@@ -106,18 +112,40 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(_state);
     }
 
+    private void HandleDead()
+    {
+        nextLevel -= 1;
+        SetNextGameState(GameState.PreLoadingLevel);
+    }
+
+    private void HandlePreLoadingLevel()
+    {
+        StartCoroutine(LevelLoadSequence());
+    }
+    private IEnumerator LevelLoadSequence()
+    {
+        Time.timeScale = 0.1f;
+        yield return new WaitForSecondsRealtime(1.5f);
+        LoadNextScene();
+        Time.timeScale = 1;
+        SetNextGameState(GameState.PlayingLevel);
+
+    }
     private void HandleLoadingLevel()
     {
-        Time.timeScale = 0f;
+        Time.timeScale = 0.1f;
         StartCoroutine(DelayedStartPlayingLevel());
     }
+
 
     private IEnumerator DelayedStartPlayingLevel()
     {
 
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(1.5f);
+        UpdateGameState(GameState.LoadingLevel);
         LoadNextScene();
         Time.timeScale = 1;
+        yield return new WaitForSecondsRealtime(0.5f);
         UpdateGameState(GameState.PlayingLevel);
 
     }
@@ -136,7 +164,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < c; i++)
         {
             Scene scene = SceneManager.GetSceneAt(i);
-            print(scene.name);
             if (scene.name != sceneName)
             {
                 SceneManager.UnloadSceneAsync(scene);

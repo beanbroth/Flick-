@@ -95,38 +95,8 @@ public class SoftBodyGenerator : MonoBehaviour
             ob.transform.localPosition = new Vector3(x, y, 0);
         }
 
-        //_center.GetComponent<CircleCollider2D>().radius = .5f * _nodeScale;
-
         for (int i = 0; i < _amountToSpawn; i++)
         {
-            //connect right
-            //SpringJoint2D tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
-            //if (i == _amountToSpawn - 1)
-            //{
-            //    tempJoint.connectedBody = _nodes[0].GetComponent<Rigidbody2D>();
-            //}
-            //else
-            //{
-            //    tempJoint.connectedBody = _nodes[i + 1].GetComponent<Rigidbody2D>();
-            //}
-            //tempJoint.frequency = _springStiffness;
-            //tempJoint.dampingRatio = _springDampening;
-
-            //connect left
-            //tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
-            //if (i == 0)
-            //{
-            //    tempJoint.connectedBody = _nodes[_amountToSpawn - 1].GetComponent<Rigidbody2D>();
-            //}
-            //else
-            //{
-            //    tempJoint.connectedBody = _nodes[i - 1].GetComponent<Rigidbody2D>();
-            //}
-            //tempJoint.frequency = _springStiffness;
-            //tempJoint.dampingRatio = _springDampening;
-
-
-
             //connect center
             SpringJoint2D tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
             tempJoint.connectedBody = _center.GetComponent<Rigidbody2D>();
@@ -139,7 +109,7 @@ public class SoftBodyGenerator : MonoBehaviour
             tempJoint = _nodes[i].AddComponent(typeof(SpringJoint2D)) as SpringJoint2D;
             tempJoint.connectedBody = _nodes[(i + _amountToSpawn / 2) % _amountToSpawn].GetComponent<Rigidbody2D>();
             //tempJoint.frequency = _springStiffness / 2;
-            tempJoint.frequency = 0;
+            tempJoint.frequency = 0.0001f;
             //tempJoint.dampingRatio = _springDampening;
             tempJoint.dampingRatio = 0;
             tempJoint.autoConfigureDistance = false;
@@ -147,7 +117,6 @@ public class SoftBodyGenerator : MonoBehaviour
 
             //connect adjcent hinges
             HingeJoint2D tempHinge = _nodes[i].AddComponent(typeof(HingeJoint2D)) as HingeJoint2D;
-
             if (i == _amountToSpawn - 1)
             {
                 tempHinge.connectedBody = _nodes[0].GetComponent<Rigidbody2D>();
@@ -161,16 +130,7 @@ public class SoftBodyGenerator : MonoBehaviour
             limits.max = _edgeAngleMax;
             tempHinge.limits = limits;
             tempHinge.useLimits = true;
-
-            ////connect center hinges (doesnt work becuase hinge does distance)
-            //tempHinge = _nodes[i].AddComponent(typeof(HingeJoint2D)) as HingeJoint2D;
-            //tempHinge.connectedBody = _center.GetComponent<Rigidbody2D>();
-            //limits = tempHinge.limits;
-            //limits.min = _edgeAngleMin;
-            //limits.max = _edgeAngleMax;
-            //tempHinge.limits = limits;
-            //tempHinge.useLimits = true;
-        }
+;        }
     }
     IEnumerator Destroy(GameObject go)
     {

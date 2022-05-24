@@ -17,7 +17,7 @@ public class LevelGoalController : MonoBehaviour
             Debug.Log("reached goal");
             _wasActivated = true;
 
-            GameManager.Instance.SetNextGameState(GameManager.GameState.LoadingLevel);
+            GameManager.Instance.SetNextGameState(GameManager.GameState.PreLoadingLevel);
         }
 
     }
