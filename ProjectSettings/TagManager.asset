@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - SoftInsides
-  - 
+  - BackgroundImage
   - 
   - 
   - 
@@ -39,6 +39,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Behind
+    uniqueID: 4162622651
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
