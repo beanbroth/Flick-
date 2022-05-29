@@ -5,7 +5,8 @@ using UnityEngine;
 public class SoftBodyNodeController : MonoBehaviour
 {
     private Rigidbody2D _rb;
-    private 
+
+    public static bool isGrounded = false;
     void Start()
     {
         GameManager.OnGameStateChanged += GameStateChanged;
@@ -37,6 +38,19 @@ public class SoftBodyNodeController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (isGrounded)
+            return;
+
+        if (collision.collider.tag == "Player")
+            return;
+
+        Debug.Log("Splat");
+        isGrounded = true;
+        JSAM.AudioManager.PlaySound(JSAM.Sounds.Squish);
+
+    }
 
     void GetFlicked(Vector2 vec)
     {

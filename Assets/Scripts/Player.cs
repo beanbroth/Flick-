@@ -163,6 +163,8 @@ public class Player : MonoBehaviour
     }
     private void ApplyFlickForce(Vector2 distance)
     {
+        JSAM.AudioManager.PlaySound(JSAM.Sounds.Woosh);
+        SoftBodyNodeController.isGrounded = false;
         Vector2 flickVec = distance / _distMult * _forceMult * (Mathf.Max(_minTimeMult, 1 - _swipeTimer));
         _centerRb.velocity = flickVec;
         OnFlick?.Invoke(flickVec);
