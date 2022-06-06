@@ -21,7 +21,7 @@ public class CoinController : MonoBehaviour
         if (collision.tag == "Player")
         {
             _hasHit = true;
-            AudioManager.PlaySound(Sounds.CoinPickup);
+            CoinSoundController.Play();
             gameObject.SetActive(false);
             Debug.Log("Picked up coni");
         }
